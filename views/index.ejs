@@ -16,22 +16,23 @@
 <h1>player <%= player %> </h1>
 <table>
 <tr>
-    <td id="c1"></td>
-    <td id="c2"></td>
-    <td id="c3"></td>
+    <td id="c1" onclick="sendMove(1)"></td>
+    <td id="c2" onclick="sendMove(2)"></td>
+    <td id="c3" onclick="sendMove(3)"></td>
 </tr>
 <tr>
-    <td id="c4"></td>
-    <td id="c5"></td>
-    <td id="c6"></td>
+    <td id="c4" onclick="sendMove(4)"></td>
+    <td id="c5" onclick="sendMove(5)"></td>
+    <td id="c6" onclick="sendMove(6)"></td>
 </tr>
 <tr>
-    <td id="c7"></td>
-    <td id="c8"></td>
-    <td id="c9"></td>
+    <td id="c7" onclick="sendMove(7)"></td>
+    <td id="c8" onclick="sendMove(8)"></td>
+    <td id="c9" onclick="sendMove(9)"></td>
 </tr>
 </table>
 <script>
+var player=<%= player %>;
 function setP1(num){
     document.getElementById("c"+num).classList.add("p1");
 }
@@ -41,6 +42,16 @@ function setP2(num){
 setP1(2);
 setP2(6);
 
+async function sendMove(cell){
+    let response = await fetch(`/GetMove/${player}/${cell}`);
+    let data = await response.json();
+    console.log(data);
+    if(data.player==1){
+        setP1(data.cell);
+    } else {
+        setP2(data.cell);
+    }
+}
 async function fetchText() {
     let response = await fetch('/GetLast');
     let data = await response.json();

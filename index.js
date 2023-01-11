@@ -2,6 +2,10 @@ const express = require('express'); //Import the express dependency
 const port = 7777;                  //Save the port number where your server will be listening
 const app = express();//Instantiate an express app, the main work horse of this server
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+
 const path = require('path');
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
@@ -15,6 +19,11 @@ router.get('/',function(req,res){
 });
 let lastMove={"player":1,"cell":5}
 router.get('/GetLast',function(req,res){
+  res.send(lastMove);
+});
+router.get('/GetMove/:p/:c',function(req,res){
+  lastMove.player=req.params.p;
+  lastMove.cell=req.params.c;
   res.send(lastMove);
 });
 
