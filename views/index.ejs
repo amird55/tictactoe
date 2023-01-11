@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+    body{background-color: lightskyblue;}
+    .p1{background-color: brown;}
+    .p2{background-color: chartreuse;}
+    td{width:30px;height: 30px;border: 1px solid black;}
+    </style>
+</head>
+<body>
+<h1>player <%= player %> </h1>
+<table>
+<tr>
+    <td id="c1"></td>
+    <td id="c2"></td>
+    <td id="c3"></td>
+</tr>
+<tr>
+    <td id="c4"></td>
+    <td id="c5"></td>
+    <td id="c6"></td>
+</tr>
+<tr>
+    <td id="c7"></td>
+    <td id="c8"></td>
+    <td id="c9"></td>
+</tr>
+</table>
+<script>
+function setP1(num){
+    document.getElementById("c"+num).classList.add("p1");
+}
+function setP2(num){
+    document.getElementById("c"+num).classList.add("p2");
+}
+setP1(2);
+setP2(6);
+
+async function fetchText() {
+    let response = await fetch('/GetLast');
+    let data = await response.json();
+    console.log(data);
+    if(data.player==1){
+        setP1(data.cell);
+    } else {
+        setP2(data.cell);
+    }
+}
+fetchText();
+</script>
+</body>
+</html>
