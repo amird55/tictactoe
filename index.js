@@ -19,11 +19,12 @@ router.get('/',function(req,res){
   res.render("index", {
   player:times});
 });
-let lastMove={};
+let lastMove={"GameStatus":"WaitToStart"};
 router.get('/GetLast',function(req,res){
   res.send(lastMove);
 });
 router.get('/GetMove/:p/:c',function(req,res){
+  lastMove.GameStatus="on";
   let p=Number(req.params.p);
   let c=Number(req.params.c);
   lastMove.player=p;
@@ -32,7 +33,7 @@ router.get('/GetMove/:p/:c',function(req,res){
   board[Math.floor(c/3)][c%3]=p;
   console.log(board);
   if(IsFinished()){
-    console.log("FINISHED")
+    GameOver();
   }
   res.send(lastMove);
 });
@@ -45,7 +46,9 @@ app.use('/', router);
 app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
     console.log(`Now listening on port ${port}`); 
 });
-
+function GameOver(){
+  lastMove.GameStatus="over";
+}
 function IsFinished(){
   console.log("IsFinished");
   let mainDiagFlag=true;

@@ -10,11 +10,13 @@
     .p1{background-color: brown;}
     .p2{background-color: chartreuse;}
     td{width:30px;height: 30px;border: 1px solid black;}
+    #end{width: 100%; height: 200px;background-color: red;color: white;display: none;}
     </style>
 </head>
 <body>
 <h1>player <%= player %> </h1>
-<table>
+<div id="end">Game Finished</div>
+<table id="brd">
 <tr>
     <td id="c1" onclick="sendMove(1)"></td>
     <td id="c2" onclick="sendMove(2)"></td>
@@ -39,26 +41,32 @@ function setP1(num){
 function setP2(num){
     document.getElementById("c"+num).classList.add("p2");
 }
-
+function updateData(data){
+    console.log(data);
+    if(data.GameStatus=="on"){
+        if(data.player==1){
+            setP1(data.cell);
+        } else {
+            setP2(data.cell);
+        }
+    }
+    else if(data.GameStatus=="over"){
+        GameOver();
+    }
+}
+function GameOver(){
+    document.getElementById("brd").style.display="none";
+    document.getElementById("end").style.display="block";
+}
 async function sendMove(cell){
     let response = await fetch(`/GetMove/${player}/${cell}`);
     let data = await response.json();
-    console.log(data);
-    if(data.player==1){
-        setP1(data.cell);
-    } else {
-        setP2(data.cell);
-    }
+    updateData(data);
 }
 async function fetchText() {
     let response = await fetch('/GetLast');
     let data = await response.json();
-    console.log(data);
-    if(data.player==1){
-        setP1(data.cell);
-    } else {
-        setP2(data.cell);
-    }
+    updateData(data);
 }
 setInterval(fetchText,500);
 </script>
