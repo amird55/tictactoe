@@ -13,27 +13,30 @@ app.set("view engine", "ejs");
 const router = express.Router();
 var times=0;
 var board=[[0,0,0],[0,0,0],[0,0,0]];
-
+let lastMove={"GameStatus":"WaitToStart"};
+var currPlayer=1;
 router.get('/',function(req,res){
   times++;
   res.render("index", {
   player:times});
 });
-let lastMove={"GameStatus":"WaitToStart"};
 router.get('/GetLast',function(req,res){
   res.send(lastMove);
 });
 router.get('/GetMove/:p/:c',function(req,res){
-  lastMove.GameStatus="on";
   let p=Number(req.params.p);
   let c=Number(req.params.c);
-  lastMove.player=p;
-  lastMove.cell=c;
-  c--;
-  board[Math.floor(c/3)][c%3]=p;
-  console.log(board);
-  if(IsFinished()){
-    GameOver();
+  if(p==currPlayer){
+    lastMove.GameStatus="on";
+    lastMove.player=p;
+    lastMove.cell=c;
+    c--;
+    board[Math.floor(c/3)][c%3]=p;
+    console.log(board);
+    if(IsFinished()){
+      GameOver();
+    }
+    currPlayer=(currPlayer==1)?2:1;
   }
   res.send(lastMove);
 });
@@ -46,6 +49,10 @@ app.use('/', router);
 app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
     console.log(`Now listening on port ${port}`); 
 });
+function NewGame(){
+  board=[[0,0,0],[0,0,0],[0,0,0]];
+  lastMove={"GameStatus":"WaitToStart"};
+}
 function GameOver(){
   lastMove.GameStatus="over";
 }
