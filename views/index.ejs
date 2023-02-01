@@ -39,8 +39,6 @@ function setP1(num){
 function setP2(num){
     document.getElementById("c"+num).classList.add("p2");
 }
-setP1(2);
-setP2(6);
 
 async function sendMove(cell){
     let response = await fetch(`/GetMove/${player}/${cell}`);
@@ -62,7 +60,7 @@ async function fetchText() {
         setP2(data.cell);
     }
 }
-fetchText();
+setInterval(fetchText,500);
 </script>
 </body>
 </html>

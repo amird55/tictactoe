@@ -12,6 +12,8 @@ app.set("view engine", "ejs");
 
 const router = express.Router();
 var times=0;
+var board=[[0,0,0],[0,0,0],[0,0,0]];
+
 router.get('/',function(req,res){
   times++;
   res.render("index", {
@@ -22,8 +24,13 @@ router.get('/GetLast',function(req,res){
   res.send(lastMove);
 });
 router.get('/GetMove/:p/:c',function(req,res){
-  lastMove.player=req.params.p;
-  lastMove.cell=req.params.c;
+  let p=Number(req.params.p);
+  let c=Number(req.params.c);
+  lastMove.player=p;
+  lastMove.cell=c;
+  c--;
+  board[Math.floor(c/3)][c%3]=p;
+  console.log(board);
   res.send(lastMove);
 });
 
