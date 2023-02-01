@@ -19,7 +19,7 @@ router.get('/',function(req,res){
   res.render("index", {
   player:times});
 });
-let lastMove={"player":1,"cell":5}
+let lastMove={};
 router.get('/GetLast',function(req,res){
   res.send(lastMove);
 });
@@ -31,6 +31,9 @@ router.get('/GetMove/:p/:c',function(req,res){
   c--;
   board[Math.floor(c/3)][c%3]=p;
   console.log(board);
+  if(IsFinished()){
+    console.log("FINISHED")
+  }
   res.send(lastMove);
 });
 
@@ -43,3 +46,44 @@ app.listen(port, () => {            //server starts listening for any attempts f
     console.log(`Now listening on port ${port}`); 
 });
 
+function IsFinished(){
+  console.log("IsFinished");
+  let mainDiagFlag=true;
+  let secDiagFlag=true;
+  for(let r=0;r<3;r++){
+    if(board[0][0]!=0){
+        if(board[r][r]!=board[0][0]){
+          mainDiagFlag=false;
+        }
+    }
+    if(board[2][0]!=0){
+        if(board[r][2-r]!=board[2][0]){
+          secDiagFlag=false;
+        }
+    }
+    //rows
+    if(board[r][0]!=0){
+      flag=true;
+      for (let c=1;c<3;c++){
+        if(board[r][0]!=board[r][c]){
+          flag=false;
+          break;
+        }
+      }
+      if(flag){return true;}
+    }
+    //cols
+    if(board[0][r]!=0){
+      flag=true;
+      for (let c=1;c<3;c++){
+        if(board[0][r]!=board[c][r]){
+          flag=false;
+          break;
+        }
+      }
+      if(flag){return true;}
+    }
+  }
+  if(mainDiagFlag || secDiagFlag){return true;}
+  return false;
+}
