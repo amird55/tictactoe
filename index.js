@@ -51,17 +51,17 @@ function GameOver(){
 }
 function IsFinished(){
   console.log("IsFinished");
-  let mainDiagFlag=true;
-  let secDiagFlag=true;
+  let mainDiagFlag=0;
+  let secDiagFlag=0;
   for(let r=0;r<3;r++){
     if(board[0][0]!=0){
-        if(board[r][r]!=board[0][0]){
-          mainDiagFlag=false;
+        if(board[r][r]==board[0][0]){
+          mainDiagFlag++;
         }
     }
     if(board[2][0]!=0){
-        if(board[r][2-r]!=board[2][0]){
-          secDiagFlag=false;
+        if(board[r][2-r]==board[2][0]){
+          secDiagFlag++;
         }
     }
     //rows
@@ -87,6 +87,7 @@ function IsFinished(){
       if(flag){return true;}
     }
   }
-  if(mainDiagFlag || secDiagFlag){return true;}
+  console.log("mainDiagFlag=",mainDiagFlag);
+  if((mainDiagFlag==3) || (secDiagFlag==3)){return true;}
   return false;
 }
